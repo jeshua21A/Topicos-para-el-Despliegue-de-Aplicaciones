@@ -55,9 +55,16 @@ class Cliente:
                 print("Error al enviar mensaje.")
     
     def enviar_mensaje_entrada(self):
-        mensaje = self.mensaje_entrada.get()
+        mensaje = self.mensaje_entrada.get().strip()
         if mensaje:
-            self.enviar_mensaje(f"{self.nombre_usuario}: {mensaje}")
+            if mensaje.upper() == "S":
+                self.enviar_mensaje(f"{self.nombre_usuario} ha salido del chat.")
+                self.salir_chat()
+                return
+            elif mensaje.upper() == "E":
+                self.enviar_mensaje(f"{self.nombre_usuario} ha vuelto a entrar al chat.")
+            else:
+                self.enviar_mensaje(f"{self.nombre_usuario}: {mensaje}")
             self.mensaje_entrada.delete(0, tk.END)
 
     def recibir_mensaje(self):
@@ -74,7 +81,10 @@ class Cliente:
                 break
     
     def salir_chat(self):
-        self.cliente_socket.send("SALIR".encode('utf-8'))
+        try:
+            self.cliente_socket.send("SALIR".encode('utf-8'))
+        except:
+            pass
         self.cliente_socket.close()
         self.gui.quit()
     

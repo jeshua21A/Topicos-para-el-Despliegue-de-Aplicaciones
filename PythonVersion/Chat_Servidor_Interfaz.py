@@ -55,13 +55,13 @@ class Server:
 
     def broadcast_mensaje(self, mensaje, cliente_address):
         self.texto_display.config(state=tk.NORMAL)
-        self.texto_display.insert(tk.END, f"Mensaje de {cliente_address}: {mensaje}\n")
+        self.texto_display.insert(tk.END, f"{mensaje}\n")
         self.texto_display.config(state=tk.DISABLED)
         self.texto_display.yview(tk.END)
 
         for cliente in self.clientes:
             try:
-                cliente.send(f"{cliente_address}: {mensaje}".encode('utf-8'))
+                cliente.send(mensaje.encode('utf-8'))
             except:
                 pass
 
